@@ -22,7 +22,7 @@ will serve as a starting timestamp.
 - Create a simple RESTful API written in Laravel/PHP.
     - All responses should be JSON
     - All requests should be JSON
-- **Bonus:** UI Interface implemented in a JS Framework
+- Simple UI Interface implemented in a JS Framework (plus if vue)
 
 ## The Exercise
 
