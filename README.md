@@ -84,12 +84,14 @@ The following requests should be implemented:
 
 You must write tests to back up your code. You are free to use any testing tools or frameworks you like.
 
-### UI (Bonus)
+### UI
 
 Create a simple ui interface, written in your favorite JS Framework (Preferred: VueJS) for a user to
 
-- Authenticate
 - View all avaliable products
+
+**Bonus*
+- Authenticate
 - Add/Remove products
 
 
