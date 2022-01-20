@@ -9,7 +9,7 @@ commits reguarly so we can track your progress.
 1. Fork the [code challenge](https://github.com/furthered/code-test) repository on Github
 2. Run composer install
 3. Perform the configuration for a [fresh install of Laravel](https://laravel.com/docs/7.x)
-4. Update the first line of this README with your name (so that it reads "Hello, YOUR NAME!"). Commit this change. This
+4. Update the first line of this README with your name (so that it reads "Hello, Taiwo Obembe"). Commit this change. This
 will serve as a starting timestamp.
 5. Complete the exercise below.
 6. Commit progress regularly.
@@ -108,3 +108,10 @@ When you are finished you will push up the application to a personal git repo. T
 James is available for any questions you may have via email at james.terrono@furthered.com.
 
 ![Good Luck](http://www.reactiongifs.us/wp-content/uploads/2014/01/good_luck_morgan_freeman.gif)
+
+
+#common commands
+php artisan migrate (run migration)
+php artisan db:seed (seed database tables)
+php artisan serve (run application)
+
