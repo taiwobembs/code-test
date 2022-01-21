@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,18 +15,28 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/** @var \Laravel\Lumen\Routing\Router $router */
+
+/*
+|--------------------------------------------------------------------------
+| Application Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register all of the routes for an application.
+| It is a breeze. Simply tell Lumen the URIs it should respond to
+| and give it the Closure to call when that URI is requested.
+|
+*/
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-$router->get('/laravel', function () use ($router) {
-    return $router->app->version();
-});
+$prefix = "apiv1";
 
-$router->group(['middleware' => 'cors','prefix' => 'apiv1'], function () use ($router) {
-    $router->get('getProducts',  ['uses' => 'ProductController@getProducts']);
-    // $router->get('getAccount/{id}', ['uses' => 'AccountController@getAccount']);
-    // $router->post('createAccount', ['uses' => 'AccountController@createAccount']);
-    // $router->post('updateAccount', ['uses' => 'AccountController@updateAccount']);
-    // $router->get('deleteAccount/{id}', ['uses' => 'AccountController@deleteAccount']);
-});
+Route::get($prefix . '/getProducts', [ProductController::class, 'getProducts']);
+
+// Route::controller(ProductController::class)->group(function () {
+//     Route::get('/getProducts}', 'getProducts');
+//     // Route::post('/orders', 'store');
+// });

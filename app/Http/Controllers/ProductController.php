@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Validator;
@@ -9,7 +8,6 @@ use Carbon\Carbon;
 
 class ProductController extends Controller
 {
-
     public function getProducts()
     {
         $products = \App\Models\Product::orderBy('name', 'ASC')->get();
