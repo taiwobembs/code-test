@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+$router->get('/laravel', function () use ($router) {
+    return $router->app->version();
+});
+
+$router->group(['middleware' => 'cors','prefix' => 'apiv1'], function () use ($router) {
+    $router->get('getProducts',  ['uses' => 'ProductController@getProducts']);
+    // $router->get('getAccount/{id}', ['uses' => 'AccountController@getAccount']);
+    // $router->post('createAccount', ['uses' => 'AccountController@createAccount']);
+    // $router->post('updateAccount', ['uses' => 'AccountController@updateAccount']);
+    // $router->get('deleteAccount/{id}', ['uses' => 'AccountController@deleteAccount']);
 });
