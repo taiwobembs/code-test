@@ -35,8 +35,12 @@ Route::get('/', function () {
 $prefix = "apiv1";
 
 Route::get($prefix . '/getProducts', [ProductController::class, 'getProducts']);
+Route::get($prefix . '/getProduct/{id}', [ProductController::class, 'getProduct']);
 
-// Route::controller(ProductController::class)->group(function () {
-//     Route::get('/getProducts}', 'getProducts');
-//     // Route::post('/orders', 'store');
+// $router->group(['middleware' => 'cors','prefix' => 'apiv1'], function () use ($router) {
+//     $router->get('getAccounts',  ['uses' => 'AccountController@getAccounts']);
+//     $router->get('getAccount/{id}', ['uses' => 'AccountController@getAccount']);
+//     $router->post('createAccount', ['uses' => 'AccountController@createAccount']);
+//     $router->post('updateAccount', ['uses' => 'AccountController@updateAccount']);
+//     $router->get('deleteAccount/{id}', ['uses' => 'AccountController@deleteAccount']);
 // });

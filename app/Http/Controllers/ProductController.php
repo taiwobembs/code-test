@@ -10,15 +10,16 @@ class ProductController extends Controller
 {
     public function getProducts()
     {
-        $products = \App\Models\Product::orderBy('name', 'ASC')->get();
+        $products = Product::orderBy('name', 'ASC')->get();
+        $products->makeHidden(['id','image']);
         return response(['data' => $products, 'message' => 'products data', 'status' => true, 'statusCode' => env('HTTP_SERVER_CODE_OK')]);
     }
 
-    public function getAccount($id)
+    public function getProduct($id)
     {
-        $account = Account::findOrFail($id);
+        $product = Product::findOrFail($id);
         
-        return response(['data' => $account, 'message' => 'get account by id!', 'status' => true, 'statusCode' => env('HTTP_SERVER_CODE_OK')]);
+        return response(['data' => $product, 'message' => 'get product by id!', 'status' => true, 'statusCode' => env('HTTP_SERVER_CODE_OK')]);
     }
 
     public function createAccount(Request $request)
@@ -121,9 +122,9 @@ class ProductController extends Controller
 
     public function deleteAccount($id)
     {
-        $resultSet = Account::find($id);
+        $resultSet = Product::find($id);
         if(!empty($resultSet)){
-            Account::findOrFail($id)->delete();
+            Product::findOrFail($id)->delete();
             return response('Deleted Successfully', env('HTTP_SERVER_CODE_OK'));
         }else{
             return response('ID does not exit', env('HTTP_SERVER_CODE_BAD_REQUEST'));

@@ -68,12 +68,12 @@ You must implement an authentication system so that the API knows which of the u
 
 The following requests should be implemented:
 
-- Add product
-    - All fields required except ID and image
+#- Add product
+    #- All fields required except ID and image
 - Update product
     - All fields required except image
-- Delete product
-- Get product
+#- Delete product
+#- Get product
 - Upload product image
 - Get list of all products
 - Attach product to requesting user
