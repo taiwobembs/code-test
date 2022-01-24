@@ -14,7 +14,7 @@ class ProductController extends Controller
     public function getProducts()
     {
         $products = Product::orderBy('name', 'ASC')->get();
-        $products->makeHidden(['id','image']);
+        // $products->makeHidden(['id','image']);
         return response(['data' => $products, 'message' => 'products data', 'status' => true, 'statusCode' => env('HTTP_SERVER_CODE_OK')]);
     }
 

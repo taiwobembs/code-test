@@ -82,13 +82,13 @@ The following requests should be implemented:
 
 #### Tests
 
-You must write tests to back up your code. You are free to use any testing tools or frameworks you like.
+# You must write tests to back up your code. You are free to use any testing tools or frameworks you like.
 
 ### UI
 
 Create a simple ui interface, written in your favorite JS Framework (Preferred: VueJS) for a user to
 
-- View all avaliable products
+#- View all avaliable products
 
 **Bonus*
 - Authenticate
