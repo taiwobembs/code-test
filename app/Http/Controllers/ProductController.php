@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 use App\Models\Product;
+use App\Models\UserProducts;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Validator;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\URL;
 
 class ProductController extends Controller
 {
@@ -22,14 +25,12 @@ class ProductController extends Controller
         return response(['data' => $product, 'message' => 'get product by id!', 'status' => true, 'statusCode' => env('HTTP_SERVER_CODE_OK')]);
     }
 
-    public function createAccount(Request $request)
+    public function addProduct(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'telephone' => 'required',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required',
-            'status' => 'required'
+            'name' => 'required',
+            'description' => 'required',
+            'price' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -37,47 +38,41 @@ class ProductController extends Controller
         }
 
         $input = $request->all();
-        $status = $input['status'];
-        $telephone = $input['telephone'];
-        $first_name = $input['first_name'];
-        $last_name = $input['last_name'];
-        $email = $input['email'];
+        $name = $input['name'];
+        $description = $input['description'];
+        $price = $input['price'];
 
-        $accountManagerObj = AccountManager::create([
-            'status'      => $status,
-            'telephone'   => $telephone,
-            'first_name'  => $first_name,
-            'last_name'  => $last_name,
-            'email' => $email,
+        $productObj = Product::create([
+            'name'      => $name,
+            'description'   => $description,
+            'price'  => $price,
             'created_at'  => Carbon::now(),
             'updated_at'  => Carbon::now()
         ]);
 
-        $saved = $accountManagerObj->save();
+        $saved = $productObj->save();
 
         if ($saved) {
             return response(['data' => [
-                'status' => $status,
-                'first_name' => $first_name,
-                'email' => $email,
-            ], 'message' => 'Account Manager created!', 'status' => true, 'statusCode' => env('HTTP_SERVER_CODE_CREATED')]);
+                'name' => $name,
+                'description' => $description,
+                'price' => $price,
+            ], 'message' => 'Product created!', 'status' => true, 'statusCode' => env('HTTP_SERVER_CODE_CREATED')]);
         } else {
             return response(['data' => [
-                'status' => $status,
-                'first_name' => $first_name,
-                'email' => $email,
-            ], 'message' => "unable to create Account Manager, something went wrong.", 'status' => false, 'statusCode' => env('HTTP_SERVER_CODE_BAD_REQUEST')]);
+                'name' => $name,
+                'description' => $description,
+                'price' => $price,
+            ], 'message' => "unable to create Product, something went wrong.", 'status' => false, 'statusCode' => env('HTTP_SERVER_CODE_BAD_REQUEST')]);
         }
     }
 
-    public function updateAccount(Request $request)
+    public function updateProduct(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'telephone' => 'required',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required',
-            'status' => 'required',
+            'name' => 'required',
+            'description' => 'required',
+            'price' => 'required',
             'id' => 'required'
         ]);
 
@@ -87,47 +82,177 @@ class ProductController extends Controller
 
         $input = $request->all();
         $id = $input['id'];
-        $status = $input['status'];
-        $telephone = $input['telephone'];
-        $first_name = $input['first_name'];
-        $last_name = $input['last_name'];
-        $email = $input['email'];
+        $name = $input['name'];
+        $description = $input['description'];
+        $price = $input['price'];
 
-        $accountManagerObj = AccountManager::findOrFail($id);
-        $accountManagerObj->telephone = $telephone;
-        $bankObj->first_name = $first_name;
-        $bankObj->status = $status;
-        $bankObj->last_name = $last_name;
-        $bankObj->email = $email;
-        $bankObj->updated_at = Carbon::now();
-        $saved = $bankObj->save();
+        $productObj = Product::findOrFail($id);
+        $productObj->name = $name;
+        $productObj->description = $description;
+        $productObj->price= $price;
+        $productObj->updated_at = Carbon::now();
+        $saved = $productObj->save();
 
         if ($saved) {
             return response(['data' => [
-                'first_name' => $first_name,
-                'email' => $email,
-                'status' => $status,
-            ], 'message' => 'AccountManager updated!', 'status' => true, 'statusCode' => env('HTTP_SERVER_CODE_CREATED')]);
+                'name' => $name,
+                'description' => $description,
+                'price' => $price,
+            ], 'message' => 'Product updated!', 'status' => true, 'statusCode' => env('HTTP_SERVER_CODE_CREATED')]);
         } else {
             return response(['data' => [
                 'name' => $name,
-                'status' => $status,
-                'status' => $status,
-            ], 'message' => "unable to update AccountManager, something went wrong.", 'status' => false, 'statusCode' => env('HTTP_SERVER_CODE_BAD_REQUEST')]);
+                'description' => $description,
+                'price' => $price,
+            ], 'message' => "unable to update Product, something went wrong.", 'status' => false, 'statusCode' => env('HTTP_SERVER_CODE_BAD_REQUEST')]);
         }
-        $tagsObj->update($request->all());
-
-        return response()->json($tagsObj, 200);
     }
 
-    public function deleteAccount($id)
+    public function uploadProductImage(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'id'    => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response(['message' => 'Validation errors', 'errors' => $validator->errors(), 'status' => false], 422);
+        }
+
+        $validator = Validator::make($request->file(), [
+            'image' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response(['message' => 'Validation errors', 'errors' => $validator->errors(), 'status' => false], 422);
+        }
+
+        $image = $request->file('image');
+        $extension = $image->extension();
+        $name = time() . "." . $extension;
+
+        $image->storeAs('public', $name);
+        $name = URL::asset('storage/'.$name); 
+
+        $input = $request->all();
+        $id = $input['id'];
+
+        $productObj = Product::findOrFail($id);
+        $productObj->image = $name;
+        $productObj->updated_at = Carbon::now();
+        $saved = $productObj->save();
+
+        if ($saved) {
+            return response(['data' => [
+                'image' => $name,
+            ], 'message' => 'Product updated!', 'status' => true, 'statusCode' => env('HTTP_SERVER_CODE_CREATED')]);
+        } else {
+            return response(['data' => [
+                'image' => $name,
+            ], 'message' => "unable to update Product, something went wrong.", 'status' => false, 'statusCode' => env('HTTP_SERVER_CODE_BAD_REQUEST')]);
+        }
+    }
+
+    public function deleteProduct($id)
     {
         $resultSet = Product::find($id);
         if(!empty($resultSet)){
             Product::findOrFail($id)->delete();
-            return response('Deleted Successfully', env('HTTP_SERVER_CODE_OK'));
+            return response(['data' => [], 'message' => 'Deleted Successfully', 'status' => true, 'statusCode' => env('HTTP_SERVER_CODE_OK')]);
         }else{
-            return response('ID does not exit', env('HTTP_SERVER_CODE_BAD_REQUEST'));
+            return response(['data' => [], 'message' => 'ID does not exit', 'status' => true, 'statusCode' => env('HTTP_SERVER_CODE_BAD_REQUEST')]);
         }
+    }
+
+    public function addProductToUser(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'product_id' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response(['message' => 'Validation errors', 'errors' => $validator->errors(), 'status' => false], 422);
+        }
+
+        $input = $request->all();
+        $user_id = $input['user_id'];
+        $product_id = $input['product_id'];
+
+
+        $userObj = User::findOrFail($user_id);
+
+        $userProductsObj = UserProducts::create([
+            'user_id'      => $userObj->id,
+            'product_id'   => $product_id,
+            'created_at'  => Carbon::now(),
+            'updated_at'  => Carbon::now()
+        ]);
+
+        $saved = $userProductsObj->save();
+
+        if ($saved) {
+            return response(['data' => [
+                'user_id'      => $user_id,
+                'product_id'   => $product_id,
+            ], 'message' => 'Product are been added to user!', 'status' => true, 'statusCode' => env('HTTP_SERVER_CODE_CREATED')]);
+        } else {
+            return response(['data' => [
+                'user_id'      => $user_id,
+                'product_id'   => $product_id,
+            ], 'message' => "unable to add product to user Product, something went wrong.", 'status' => false, 'statusCode' => env('HTTP_SERVER_CODE_BAD_REQUEST')]);
+        }
+    }
+
+    public function removeProductToUser(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'product_id' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response(['message' => 'Validation errors', 'errors' => $validator->errors(), 'status' => false], 422);
+        }
+
+        $input = $request->all();
+        $user_id = $input['user_id'];
+        $product_id = $input['product_id'];
+
+
+        $userObj = User::find($user_id);
+        $productObj = Product::find($product_id);
+
+        if(!empty($userObj) && !empty($productObj)){
+            $status = Product::findOrFail($product_id)->delete();
+            return response(['data' => [], 'message' => 'Product has been removed Successfull', 'status' => true, 'statusCode' => env('HTTP_SERVER_CODE_OK')]);
+        }else{
+            return response(['data' => [], 'message' => 'UserID or ProductID does not exit', 'status' => true, 'statusCode' => env('HTTP_SERVER_CODE_BAD_REQUEST')]);
+        }
+    }
+
+    public function getProductsForUser($id)
+    {
+        $user = User::find($id);
+
+        if(!empty($user)){
+            $userProducts = UserProducts::where('user_id', $id)
+                ->orderBy('product_id')
+                ->get();
+            
+            $userProductArray = [];
+            $productsArray = [];
+            foreach($userProducts as $userProduct){
+                array_push($userProductArray,$userProduct->product_id);
+
+                $products = Product::where('id',$userProductArray)->orderBy('name', 'ASC')->get();
+                $products->makeHidden(['id','image']);
+                array_push($productsArray,$products);
+            }
+
+            return response(['data' => $productsArray, 'message' => 'products data', 'status' => true, 'statusCode' => env('HTTP_SERVER_CODE_OK')]);    
+        }else{
+            return response(['data' => [], 'message' => 'UserID does not exit', 'status' => true, 'statusCode' => env('HTTP_SERVER_CODE_BAD_REQUEST')]);
+        }   
     }
 }

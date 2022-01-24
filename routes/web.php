@@ -31,16 +31,3 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
-$prefix = "apiv1";
-
-Route::get($prefix . '/getProducts', [ProductController::class, 'getProducts']);
-Route::get($prefix . '/getProduct/{id}', [ProductController::class, 'getProduct']);
-
-// $router->group(['middleware' => 'cors','prefix' => 'apiv1'], function () use ($router) {
-//     $router->get('getAccounts',  ['uses' => 'AccountController@getAccounts']);
-//     $router->get('getAccount/{id}', ['uses' => 'AccountController@getAccount']);
-//     $router->post('createAccount', ['uses' => 'AccountController@createAccount']);
-//     $router->post('updateAccount', ['uses' => 'AccountController@updateAccount']);
-//     $router->get('deleteAccount/{id}', ['uses' => 'AccountController@deleteAccount']);
-// });

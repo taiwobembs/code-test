@@ -70,15 +70,15 @@ The following requests should be implemented:
 
 #- Add product
     #- All fields required except ID and image
-- Update product
-    - All fields required except image
+#- Update product
+    #- All fields required except image
 #- Delete product
 #- Get product
-- Upload product image
-- Get list of all products
-- Attach product to requesting user
-- Remove product from requesting user
-- List products attached to requesting user
+#- Get list of all products
+# - Upload product image
+# - Attach product to requesting user
+# - Remove product from requesting user
+# - List products attached to requesting user
 
 #### Tests
 
@@ -114,6 +114,6 @@ James is available for any questions you may have via email at james.terrono@fur
 php artisan migrate (run migration)
 php artisan db:seed (seed database tables)
 php artisan serve (run application)
-php artisan make:migration create_products_table (create migration)
+php artisan make:migration create_users_products_table (create migration)
 
 

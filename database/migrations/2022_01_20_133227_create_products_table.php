@@ -18,7 +18,7 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->text('description');
             $table->decimal('price', 10, 2);
-            $table->string('image');
+            $table->string('image')->default('https://via.placeholder.com/350x150');
             $table->timestamps();
         });
     }
