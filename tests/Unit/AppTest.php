@@ -26,4 +26,40 @@ class AppTest extends TestCase
         $this->assertEquals(200, $response->status());
     }
 
+    public function test_deleteProduct()
+    {
+        $response = $this->get('/api/v1/deleteProduct/1000');
+        $this->assertEquals(200, $response->status());
+    }
+
+    public function test_addProduct()
+    {
+        $response = $this->post('/api/v1/addProduct/');
+        $this->assertEquals(422, $response->status());
+    }
+
+    public function test_updateProduct()
+    {
+        $response = $this->post('/api/v1/updateProduct/');
+        $this->assertEquals(422, $response->status());
+    }
+
+    public function test_uploadProductImage()
+    {
+        $response = $this->post('/api/v1/uploadProductImage/');
+        $this->assertEquals(422, $response->status());
+    }
+
+    public function test_addProductToUser()
+    {
+        $response = $this->post('/api/v1/addProductToUser/');
+        $this->assertEquals(422, $response->status());
+    }
+
+    public function test_removeProductToUser()
+    {
+        $response = $this->post('/api/v1/removeProductToUser/');
+        $this->assertEquals(422, $response->status());
+    }
+
 }
